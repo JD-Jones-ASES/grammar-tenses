@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verb Tense Practice - Verb Tense Explorer</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .nav-section {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .back-button {
+            padding: 10px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .score-display {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .mode-selector {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .mode-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .mode-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .mode-button {
+            padding: 20px;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .mode-button:hover {
+            border-color: #48bb78;
+            background: #f0fff4;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.2);
+        }
+
+        .mode-button.active {
+            border-color: #48bb78;
+            background: #48bb78;
+            color: white;
+        }
+
+        .mode-button h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+        }
+
+        .mode-button p {
+            margin: 0;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .practice-area {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .practice-area.active {
+            display: block;
+        }
+
+        .question-section {
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 1.3em;
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #48bb78;
+        }
+
+        .sentence-display {
+            font-size: 1.4em;
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+            background: #f7fafc;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            font-style: italic;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .option-button {
+            padding: 15px 20px;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .option-button:hover {
+            border-color: #667eea;
+            background: #edf2f7;
+            transform: translateY(-2px);
+        }
+
+        .option-button.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .option-button.correct {
+            border-color: #48bb78;
+            background: #48bb78;
+            color: white;
+        }
+
+        .option-button.incorrect {
+            border-color: #f56565;
+            background: #f56565;
+            color: white;
+        }
+
+        .feedback {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            text-align: center;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 2px solid #48bb78;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 2px solid #f56565;
+            display: block;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .primary-button {
+            background: #48bb78;
+            color: white;
+        }
+
+        .primary-button:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.3);
+        }
+
+        .secondary-button {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .secondary-button:hover {
+            background: #cbd5e0;
+            transform: translateY(-2px);
+        }
+
+        .stats-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 10px;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #48bb78;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .nav-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .mode-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎯 Verb Tense Practice</h1>
+        <p>Test your knowledge of English verb tenses with interactive exercises</p>
+    </header>
+
+    <div class="nav-section">
+        <a href="index.html" class="back-button">
+            ← Back to Explorer
+        </a>
+        <div class="score-display" id="score-display">
+            Score: <span id="current-score">0</span> / <span id="total-questions">0</span>
+        </div>
+    </div>
+
+    <div class="stats-section" id="stats-section" style="display: none;">
+        <div class="stat-item">
+            <span class="stat-value" id="correct-count">0</span>
+            <span class="stat-label">Correct</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value" id="accuracy">0%</span>
+            <span class="stat-label">Accuracy</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value" id="streak">0</span>
+            <span class="stat-label">Streak</span>
+        </div>
+    </div>
+
+    <div class="mode-selector" id="mode-selector">
+        <div class="mode-title">Choose Your Practice Mode</div>
+        <div class="mode-buttons">
+            <div class="mode-button" onclick="startMode('identify')">
+                <h3>🔍 Identify the Tense</h3>
+                <p>You'll see a sentence and choose which tense it uses from multiple options.</p>
+            </div>
+            <div class="mode-button" onclick="startMode('match')">
+                <h3>🎯 Match the Tense</h3>
+                <p>You'll be given a tense name and choose which sentence uses that tense.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Identify Tense Mode -->
+    <div class="practice-area" id="identify-mode">
+        <div class="question-section">
+            <div class="question-text">What tense is used in this sentence?</div>
+            <div class="sentence-display" id="identify-sentence"></div>
+        </div>
+        
+        <div class="options-grid" id="identify-options"></div>
+        
+        <div class="feedback" id="identify-feedback"></div>
+        
+        <div class="action-buttons">
+            <button class="action-button primary-button" id="identify-submit" onclick="submitIdentifyAnswer()">Submit Answer</button>
+            <button class="action-button secondary-button" id="identify-next" onclick="nextIdentifyQuestion()" style="display: none;">Next Question</button>
+            <button class="action-button secondary-button" onclick="showModeSelector()">Change Mode</button>
+        </div>
+    </div>
+
+    <!-- Match Tense Mode -->
+    <div class="practice-area" id="match-mode">
+        <div class="question-section">
+            <div class="question-text">Which sentence uses the <strong><span id="target-tense"></span></strong> tense?</div>
+        </div>
+        
+        <div class="options-grid" id="match-options"></div>
+        
+        <div class="feedback" id="match-feedback"></div>
+        
+        <div class="action-buttons">
+            <button class="action-button primary-button" id="match-submit" onclick="submitMatchAnswer()">Submit Answer</button>
+            <button class="action-button secondary-button" id="match-next" onclick="nextMatchQuestion()" style="display: none;">Next Question</button>
+            <button class="action-button secondary-button" onclick="showModeSelector()">Change Mode</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Practice mode state
+        let currentMode = null;
+        let currentQuestion = null;
+        let selectedAnswer = null;
+        let score = 0;
+        let totalQuestions = 0;
+        let correctAnswers = 0;
+        let currentStreak = 0;
+        let longestStreak = 0;
+
+        // Tense names mapping
+        const tenseNames = {
+            'simple-past': 'Simple Past',
+            'simple-present': 'Simple Present', 
+            'simple-future': 'Simple Future',
+            'continuous-past': 'Past Continuous',
+            'continuous-present': 'Present Continuous',
+            'continuous-future': 'Future Continuous',
+            'perfect-past': 'Past Perfect',
+            'perfect-present': 'Present Perfect',
+            'perfect-future': 'Future Perfect',
+            'perfect-continuous-past': 'Past Perfect Continuous',
+            'perfect-continuous-present': 'Present Perfect Continuous',
+            'perfect-continuous-future': 'Future Perfect Continuous'
+        };
+
+        // Get all available tense keys
+        const allTenseKeys = Object.keys(tenseNames);
+
+        function startMode(mode) {
+            currentMode = mode;
+            document.getElementById('mode-selector').style.display = 'none';
+            document.getElementById('stats-section').style.display = 'grid';
+            
+            if (mode === 'identify') {
+                document.getElementById('identify-mode').classList.add('active');
+                generateIdentifyQuestion();
+            } else if (mode === 'match') {
+                document.getElementById('match-mode').classList.add('active');
+                generateMatchQuestion();
+            }
+        }
+
+        function showModeSelector() {
+            document.getElementById('mode-selector').style.display = 'block';
+            document.getElementById('identify-mode').classList.remove('active');
+            document.getElementById('match-mode').classList.remove('active');
+            document.getElementById('stats-section').style.display = 'none';
+            currentMode = null;
+        }
+
+        function generateIdentifyQuestion() {
+            // Reset state
+            selectedAnswer = null;
+            document.getElementById('identify-submit').style.display = 'inline-block';
+            document.getElementById('identify-next').style.display = 'none';
+            document.getElementById('identify-feedback').style.display = 'none';
+
+            // Pick random verb and tense
+            const randomVerb = verbs[Math.floor(Math.random() * verbs.length)];
+            const availableTenses = allTenseKeys.filter(key => randomVerb[key]);
+            const correctTense = availableTenses[Math.floor(Math.random() * availableTenses.length)];
+            
+            // Store current question
+            currentQuestion = {
+                sentence: randomVerb[correctTense],
+                correctAnswer: correctTense,
+                verb: randomVerb.verb
+            };
+
+            // Display sentence
+            document.getElementById('identify-sentence').textContent = currentQuestion.sentence;
+
+            // Generate options (correct + 3 random wrong)
+            const options = [correctTense];
+            const wrongOptions = allTenseKeys.filter(key => key !== correctTense);
+            
+            while (options.length < 4) {
+                const randomWrong = wrongOptions[Math.floor(Math.random() * wrongOptions.length)];
+                if (!options.includes(randomWrong)) {
+                    options.push(randomWrong);
+                }
+            }
+
+            // Shuffle options
+            options.sort(() => Math.random() - 0.5);
+
+            // Display options
+            const optionsContainer = document.getElementById('identify-options');
+            optionsContainer.innerHTML = '';
+            
+            options.forEach(tenseKey => {
+                const button = document.createElement('div');
+                button.className = 'option-button';
+                button.textContent = tenseNames[tenseKey];
+                button.onclick = () => selectIdentifyOption(button, tenseKey);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectIdentifyOption(button, tenseKey) {
+            // Clear previous selections
+            document.querySelectorAll('#identify-options .option-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Select this option
+            button.classList.add('selected');
+            selectedAnswer = tenseKey;
+        }
+
+        function submitIdentifyAnswer() {
+            if (!selectedAnswer) {
+                alert('Please select an answer first!');
+                return;
+            }
+
+            totalQuestions++;
+            const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
+            
+            if (isCorrect) {
+                score++;
+                correctAnswers++;
+                currentStreak++;
+                longestStreak = Math.max(longestStreak, currentStreak);
+            } else {
+                currentStreak = 0;
+            }
+
+            // Show feedback
+            const feedback = document.getElementById('identify-feedback');
+            const options = document.querySelectorAll('#identify-options .option-button');
+            
+            options.forEach(btn => {
+                const btnTense = Array.from(allTenseKeys).find(key => 
+                    btn.textContent === tenseNames[key]
+                );
+                
+                if (btnTense === currentQuestion.correctAnswer) {
+                    btn.classList.add('correct');
+                } else if (btnTense === selectedAnswer && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+                btn.onclick = null; // Disable clicking
+            });
+
+            if (isCorrect) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = '✓ Correct! This sentence uses the ' + tenseNames[currentQuestion.correctAnswer] + ' tense.';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = '✗ Incorrect. This sentence uses the ' + tenseNames[currentQuestion.correctAnswer] + ' tense.';
+            }
+
+            updateStats();
+            document.getElementById('identify-submit').style.display = 'none';
+            document.getElementById('identify-next').style.display = 'inline-block';
+        }
+
+        function nextIdentifyQuestion() {
+            generateIdentifyQuestion();
+        }
+
+        function generateMatchQuestion() {
+            // Reset state
+            selectedAnswer = null;
+            document.getElementById('match-submit').style.display = 'inline-block';
+            document.getElementById('match-next').style.display = 'none';
+            document.getElementById('match-feedback').style.display = 'none';
+
+            // Pick target tense
+            const targetTense = allTenseKeys[Math.floor(Math.random() * allTenseKeys.length)];
+            document.getElementById('target-tense').textContent = tenseNames[targetTense];
+
+            // Find verb that has this tense
+            const verbsWithTense = verbs.filter(verb => verb[targetTense]);
+            const correctVerb = verbsWithTense[Math.floor(Math.random() * verbsWithTense.length)];
+            const correctSentence = correctVerb[targetTense];
+
+            // Generate wrong options
+            const wrongSentences = [];
+            const otherTenses = allTenseKeys.filter(key => key !== targetTense);
+            
+            while (wrongSentences.length < 3) {
+                const randomVerb = verbs[Math.floor(Math.random() * verbs.length)];
+                const randomTense = otherTenses[Math.floor(Math.random() * otherTenses.length)];
+                
+                if (randomVerb[randomTense] && !wrongSentences.includes(randomVerb[randomTense])) {
+                    wrongSentences.push(randomVerb[randomTense]);
+                }
+            }
+
+            // Combine and shuffle options
+            const allOptions = [correctSentence, ...wrongSentences];
+            allOptions.sort(() => Math.random() - 0.5);
+
+            // Store current question
+            currentQuestion = {
+                targetTense: targetTense,
+                correctSentence: correctSentence,
+                options: allOptions
+            };
+
+            // Display options
+            const optionsContainer = document.getElementById('match-options');
+            optionsContainer.innerHTML = '';
+            
+            allOptions.forEach(sentence => {
+                const button = document.createElement('div');
+                button.className = 'option-button';
+                button.textContent = sentence;
+                button.onclick = () => selectMatchOption(button, sentence);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectMatchOption(button, sentence) {
+            // Clear previous selections
+            document.querySelectorAll('#match-options .option-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Select this option
+            button.classList.add('selected');
+            selectedAnswer = sentence;
+        }
+
+        function submitMatchAnswer() {
+            if (!selectedAnswer) {
+                alert('Please select an answer first!');
+                return;
+            }
+
+            totalQuestions++;
+            const isCorrect = selectedAnswer === currentQuestion.correctSentence;
+            
+            if (isCorrect) {
+                score++;
+                correctAnswers++;
+                currentStreak++;
+                longestStreak = Math.max(longestStreak, currentStreak);
+            } else {
+                currentStreak = 0;
+            }
+
+            // Show feedback
+            const feedback = document.getElementById('match-feedback');
+            const options = document.querySelectorAll('#match-options .option-button');
+            
+            options.forEach(btn => {
+                if (btn.textContent === currentQuestion.correctSentence) {
+                    btn.classList.add('correct');
+                } else if (btn.textContent === selectedAnswer && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+                btn.onclick = null; // Disable clicking
+            });
+
+            if (isCorrect) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = '✓ Correct! You identified the ' + tenseNames[currentQuestion.targetTense] + ' tense correctly.';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = '✗ Incorrect. The correct sentence was: "' + currentQuestion.correctSentence + '"';
+            }
+
+            updateStats();
+            document.getElementById('match-submit').style.display = 'none';
+            document.getElementById('match-next').style.display = 'inline-block';
+        }
+
+        function nextMatchQuestion() {
+            generateMatchQuestion();
+        }
+
+        function updateStats() {
+            document.getElementById('current-score').textContent = score;
+            document.getElementById('total-questions').textContent = totalQuestions;
+            document.getElementById('correct-count').textContent = correctAnswers;
+            document.getElementById('accuracy').textContent = totalQuestions > 0 ? 
+                Math.round((correctAnswers / totalQuestions) * 100) + '%' : '0%';
+            document.getElementById('streak').textContent = currentStreak;
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof verbs === 'undefined') {
+                alert('Error: Verb data not loaded. Please make sure script.js is included.');
+                return;
+            }
+            
+            console.log('Practice mode initialized with', verbs.length, 'verbs');
+        });
+    </script>
+</body>
+</html>

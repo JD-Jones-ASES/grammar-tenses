@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verb Tense Explorer</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .controls-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        #search {
+            flex: 1;
+            min-width: 300px;
+            padding: 12px 18px;
+            font-size: 16px;
+            border: 2px solid #e1e8ed;
+            border-radius: 25px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        #search:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        #practice {
+            background: #48bb78;
+        }
+
+        #practice:hover {
+            background: #38a169;
+        }
+
+        #random-verb {
+            background: #ed8936;
+        }
+
+        #random-verb:hover {
+            background: #dd6b20;
+        }
+
+        #clear-search {
+            background: #718096;
+        }
+
+        #clear-search:hover {
+            background: #4a5568;
+        }
+
+        .filter-section {
+            margin-top: 20px;
+        }
+
+        .filter-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        #alphabet-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        #alphabet-filters button {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        #alphabet-filters button.active {
+            background: #38a169;
+        }
+
+        .tense-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tense-filters button {
+            background: #e2e8f0;
+            color: #4a5568;
+            font-size: 12px;
+            padding: 6px 12px;
+        }
+
+        .tense-filters button:hover {
+            background: #cbd5e0;
+        }
+
+        .tense-filters button.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .stats-bar {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stats-info {
+            color: #4a5568;
+            font-size: 14px;
+        }
+
+        .stats-info strong {
+            color: #2d3748;
+        }
+
+        .view-toggle {
+            display: flex;
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .view-toggle button {
+            background: transparent;
+            color: #718096;
+            padding: 8px 16px;
+            margin: 0;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .view-toggle button.active {
+            background: white;
+            color: #4a5568;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #verbs-container {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        #verbs-container.grid-view {
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        }
+
+        #verbs-container.list-view {
+            grid-template-columns: 1fr;
+        }
+
+        .verb-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .verb-card:hover {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+            border-color: #667eea;
+        }
+
+        .verb-card.expanded {
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .verb-card h2 {
+            margin: 0 0 15px 0;
+            color: #2d3748;
+            font-size: 1.5em;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .expand-icon {
+            font-size: 20px;
+            color: #a0aec0;
+            transition: transform 0.3s ease;
+        }
+
+        .verb-card.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .verb-details {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .verb-details.visible {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tense-group {
+            margin-bottom: 20px;
+        }
+
+        .tense-category {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tense-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .tense-item {
+            padding: 8px 12px;
+            background: #f7fafc;
+            border-radius: 6px;
+            border-left: 4px solid #e2e8f0;
+            font-size: 14px;
+        }
+
+        .tense-item strong {
+            color: #2d3748;
+            display: inline-block;
+            min-width: 120px;
+        }
+
+        .tense-item:hover {
+            background: #edf2f7;
+            border-left-color: #667eea;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+
+        .no-results h3 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .search-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #search {
+                min-width: unset;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+
+            #verbs-container.grid-view {
+                grid-template-columns: 1fr;
+            }
+
+            .tense-item strong {
+                min-width: 100px;
+                font-size: 13px;
+            }
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Verb Tense Explorer</h1>
+        <p>Master English verb conjugations with interactive examples and practice tools</p>
+    </header>
+
+    <div class="controls-section">
+        <div class="search-container">
+            <input type="text" id="search" placeholder="Search for a verb (e.g., 'run', 'eat', 'study')...">
+            <div class="button-group">
+                <button id="clear-search">Clear</button>
+                <button id="random-verb">Random Verb</button>
+                <button id="practice" onclick="window.location.href='practice.html'">Practice Mode</button>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-title">Filter by First Letter:</div>
+            <div id="alphabet-filters"></div>
+            
+           </div>
+    </div>
+
+    <div class="stats-bar">
+        <div class="stats-info">
+            Showing <strong id="verb-count">0</strong> of <strong id="total-verbs">0</strong> verbs
+        </div>
+        <div class="view-toggle">
+            <button id="grid-view" class="active" onclick="setViewMode('grid')">Grid</button>
+            <button id="list-view" onclick="setViewMode('list')">List</button>
+        </div>
+    </div>
+
+    <div id="verbs-container" class="grid-view">
+        <div class="loading">Loading verbs...</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
