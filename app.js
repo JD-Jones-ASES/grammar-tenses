@@ -207,13 +207,13 @@
         const cell = sample && sample.cells.find(function (item) {
           return item.tense.id === tense.id;
         });
-        if (cell && cell.unusual) btn.classList.add("is-unusual");
+        if (opts.showPhrases !== false && cell && cell.unusual) btn.classList.add("is-unusual");
         const title = document.createElement("span");
         title.className = "cell-label";
         title.textContent = tense.label;
         const phrase = document.createElement("span");
         phrase.className = "cell-phrase";
-        phrase.textContent = cell ? cell.phrase : tense.short;
+        phrase.textContent = opts.showPhrases === false ? tense.short : (cell ? cell.phrase : tense.short);
         btn.appendChild(title);
         btn.appendChild(phrase);
         if (interactive && opts.onPick) {
@@ -478,6 +478,7 @@
     els.playPattern.hidden = true;
     els.playAtlas.hidden = true;
     els.playOptions.hidden = true;
+    els.playOptions.replaceChildren();
     els.answerForm.hidden = true;
     els.answerInput.value = "";
     els.answerInput.disabled = false;
@@ -490,7 +491,7 @@
       els.playBlank.hidden = false;
       els.playBlank.textContent = question.blank;
       els.playPattern.hidden = false;
-      els.playPattern.textContent = question.hint + " · " + question.pattern;
+      els.playPattern.textContent = question.verb + " · " + question.hint + " · " + question.pattern;
     }
     if (question.input === "grid") {
       els.playAtlas.hidden = false;
@@ -509,8 +510,7 @@
   function renderPlayAtlas() {
     const question = currentQuestion();
     renderAtlas(els.playAtlas, {
-      lemma: question.verb,
-      subject: question.subject,
+      showPhrases: false,
       selected: state.session.resolved ? question.tenseId : state.atlasFocus,
       marked: state.session.marked,
       compact: true,

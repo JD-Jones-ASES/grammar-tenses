@@ -152,7 +152,7 @@
     irr("dream", "of open water", "dreamed", "dreamed", { pasts: ["dreamt"], participles: ["dreamt"] }),
     irr("prove", "the shorter route", "proved", "proved", { participles: ["proven"] }),
 
-    regular("accept", "the change of plan"),
+    regular("accept", "the invitation"),
     regular("add", "a note in the margin"),
     regular("agree", "on a later start", { stative: true }),
     regular("allow", "more time for the crossing"),

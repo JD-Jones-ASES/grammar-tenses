@@ -221,8 +221,8 @@ h1 {
   backdrop-filter: blur(14px);
 }
 
-.view[hidden] {
-  display: none;
+[hidden] {
+  display: none !important;
 }
 
 .panel-title,
