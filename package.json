@@ -1,0 +1,9 @@
+{
+  "name": "tense-atlas",
+  "private": true,
+  "description": "A map of English verb time: twelve tenses, a lexicon, and drills.",
+  "scripts": {
+    "test": "node --test test/game.test.js",
+    "start": "python3 -m http.server 8080"
+  }
+}

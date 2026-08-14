@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="The Tense Atlas">
+  <rect width="64" height="64" rx="12" fill="#f4ead4"/>
+  <rect x="8" y="8" width="48" height="48" rx="4" fill="none" stroke="#2a2118" stroke-width="2"/>
+  <path d="M24 8v48M40 8v48M8 24h48M8 40h48" fill="none" stroke="#3d6b6a" stroke-width="1.4"/>
+  <circle cx="32" cy="32" r="5" fill="#b8863a"/>
+  <path d="M32 18l2.2 8.2H43l-7 5.2 2.6 8.6L32 34.8l-6.6 5.2 2.6-8.6-7-5.2h8.8z" fill="#2a2118"/>
+</svg>
